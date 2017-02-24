@@ -1,0 +1,32 @@
+{
+  "name": "simple-peer-server",
+  "version": "1.0.0",
+  "description": "Basic server to test WebRTC connections of [SimplePeers](http://github.com/feross/simple-peer) across different services and network conditions",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/elavoie/simple-peer-server.git"
+  },
+  "keywords": [
+    "simple-peer",
+    "webrtc",
+    "testing"
+  ],
+  "author": "Erick Lavoie",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/elavoie/simple-peer-server/issues"
+  },
+  "homepage": "https://github.com/elavoie/simple-peer-server#readme",
+  "dependencies": {
+    "electron-webrtc": "^0.3.0",
+    "express": "^4.14.1",
+    "simple-peer": "^6.4.3",
+    "simple-websocket": "^5.0.0",
+    "ws": "^2.1.0"
+  }
+}
