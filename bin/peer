@@ -33,10 +33,12 @@ socket.on('connect', function () {
 
   p.on('close', function () {
     console.log('closed')
+    clearTimeout(timeout)
   })
 
   p.on('error', function (err) {
     console.log('error: ' + err)
+    clearTimeout(timeout)
   })
 
   p.on('data', function (data) {
