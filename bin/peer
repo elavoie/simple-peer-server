@@ -13,8 +13,10 @@ console.log('socket: ' + socket)
 
 var timeout = null
 function ping () {
-  if (p) p.send('ping')
-  timeout = setTimeout(ping, 1000)   
+  if (p) {
+    p.send('ping')
+    timeout = setTimeout(ping, 1000)   
+  }
 }
 
 function shutdown() {
@@ -27,6 +29,7 @@ function shutdown() {
     socket.destroy()
     socket = null
   }
+  wrtc.close()
 }
 
 var p = null
