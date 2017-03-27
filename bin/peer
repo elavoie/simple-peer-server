@@ -67,9 +67,9 @@ socket.on('connect', function () {
       // ping is the other option
       // ping()
 
-      var s = toPull.duplex(p)
-      s.on('error', function (err) {
+      var s = toPull.duplex(p, function (err) {
         console.log('duplex stream error: ' + err)
+        shutdown()
       })
 
       // Continously send numbers
