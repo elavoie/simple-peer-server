@@ -11,8 +11,16 @@ var socket = new SimpleSocket('ws://' + host + (initiator ? '/initiator' : '/pee
 
 console.log('socket: ' + socket)
 
-var p = new SimplePeer({ 'initiator': initiator, wrtc: wrtc })
+var timeout = null
+function ping () {
+  if (p) p.send('ping')
+  timeout = setTimeout(ping, 1000)   
+}
+
+var p = null
 socket.on('connect', function () {
+  p = new SimplePeer({ 'initiator': initiator, wrtc: wrtc })
+
   p.on('signal', function (data) {
     console.log('signal: ' + JSON.stringify(data))
     socket.send(JSON.stringify(data))
@@ -29,9 +37,16 @@ socket.on('connect', function () {
   p.on('error', function (err) {
     console.log('error: ' + err)
   })
+
+  p.on('data', function (data) {
+    console.log('data: ' + data)
+    if (data === 'ping') {
+      p.send('pong')
+    }
+  })
 })
 
 socket.on('data', function (data) {
-  p.signal(JSON.parse(data))
+  if (p) p.signal(JSON.parse(data))
 })
 
