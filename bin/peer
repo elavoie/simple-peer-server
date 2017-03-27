@@ -72,6 +72,7 @@ socket.on('connect', function () {
         pull.count(),
         pull.map(String),
         probe('before send'),
+        pull.asyncMap(function (x,cb) { setTimeout(function () { cb(null, x) }, 1000) }),
         toPull(p).duplex,
         probe('after receive'),
         pull.through(console.log),
