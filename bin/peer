@@ -67,13 +67,18 @@ socket.on('connect', function () {
       // ping is the other option
       // ping()
 
+      var s = toPull.duplex(p)
+      s.on('error', function (err) {
+        console.log('duplex stream error: ' + err)
+      })
+
       // Continously send numbers
       pull(
         pull.count(),
         pull.map(String),
         probe('peer:before-send'),
         pull.asyncMap(function (x,cb) { setTimeout(function () { cb(null, x) }, 1000) }),
-        toPull.duplex(p),
+        s,
         pull.map(String),
         probe('peer:after-receive'),
         pull.through(function (x) { console.log(x.toString()) }),
