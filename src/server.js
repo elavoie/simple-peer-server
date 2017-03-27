@@ -1,9 +1,35 @@
 var http = require('http')
 var ws = require('ws')
+var os = require('os')
 var express = require('express')
 var app = express()
 var path = require('path')
 app.use(express.static(path.join(__dirname, '../public')))
+
+function getIPAddresses () {
+  var ifaces = os.networkInterfaces()
+  var addresses = []
+
+  Object.keys(ifaces).forEach(function (ifname) {
+    var alias = 0
+
+    ifaces[ifname].forEach(function (iface) {
+      if (iface.family !== 'IPv4' || iface.internal !== false) {
+        // skip over internal (i.e. 127.0.0.1) and non-ipv4 addresses
+        return
+      }
+
+      if (alias >= 1) {
+        // this single interface has multiple ipv4 addresses
+        addresses.push(iface.address)
+      } else {
+        // this interface has only one ipv4 adress
+        addresses.push(iface.address)
+      }
+    })
+  })
+  return addresses
+}
 
 function Server (port) {
   port = port || process.env.PORT || 5000
@@ -11,7 +37,9 @@ function Server (port) {
   var self = this
   this.httpServer = http.createServer(app)
   this.httpServer.listen(port)
-  console.log('http server listening on %d', port)
+  getIPAddresses().forEach(function (addr) {
+    console.log('Server listening on %s:%d', addr, port)
+  })
   this.initiator = null
   this.initiatorQueue = []
   this.peer = null
@@ -58,4 +86,8 @@ function Server (port) {
   return this
 }
 
-var s = new Server()
+Server.create = function () {
+  return new Server()
+}
+
+Server.create()
