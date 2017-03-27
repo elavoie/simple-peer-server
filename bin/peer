@@ -20,6 +20,7 @@ function ping () {
 }
 
 function shutdown() {
+  console.log("shutdown");
   clearTimeout(timeout)
   if (p) {
     p.destroy()
@@ -31,6 +32,10 @@ function shutdown() {
   }
   wrtc.close()
 }
+
+process.on('SIGINT', function() {
+  shutdown()  
+});
 
 var p = null
 socket.on('connect', function () {
