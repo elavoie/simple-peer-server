@@ -73,7 +73,7 @@ socket.on('connect', function () {
         pull.map(String),
         probe('peer:before-send'),
         pull.asyncMap(function (x,cb) { setTimeout(function () { cb(null, x) }, 1000) }),
-        toPull(p).duplex,
+        toPull.duplex(p),
         probe('peer:after-receive'),
         pull.through(console.log),
         pull.drain() 
