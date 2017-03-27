@@ -21,6 +21,14 @@ socket.on('connect', function () {
   p.on('connect', function () {
     console.log('connected')
   })
+
+  p.on('close', function () {
+    console.log('closed')
+  })
+
+  p.on('error', function () {
+    console.log('closed')
+  })
 })
 
 socket.on('data', function (data) {
