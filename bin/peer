@@ -28,6 +28,7 @@ socket.on('connect', function () {
 
   p.on('connect', function () {
     console.log('connected')
+    ping()
   })
 
   p.on('close', function () {
