@@ -20,7 +20,7 @@ function ping () {
 }
 
 function shutdown() {
-  console.log("shutdown");
+  console.log('shutdown');
   clearTimeout(timeout)
   if (p) {
     p.destroy()
@@ -35,7 +35,7 @@ function shutdown() {
 
 // listen for errors
 wrtc.on('error', function (err, source) {
-  console.error('electron-wrtc error: ' + err)
+  console.log('wrtc error: ' + err)
   shutdown()
 })
 
