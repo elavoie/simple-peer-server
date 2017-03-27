@@ -78,7 +78,7 @@ socket.on('connect', function () {
         pull.count(),
         pull.map(String),
         probe('peer:before-send'),
-        // pull.asyncMap(function (x,cb) { setTimeout(function () { cb(null, x) }, 1000) }),
+        pull.asyncMap(function (x,cb) { setTimeout(function () { cb(null, x) }, 1000) }),
         s,
         pull.map(String),
         probe('peer:after-receive'),
