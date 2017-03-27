@@ -33,9 +33,15 @@ function shutdown() {
   wrtc.close()
 }
 
-// listen for errors
+// Catching errors coming from evaluating code in electron-eval.
 wrtc.on('error', function (err, source) {
-  console.log('wrtc error: ' + err)
+  console.error('wrtc error: ' + err)
+  shutdown()
+})
+
+// Catching errors coming from the electron process crashing.
+wrtc.electronDaemon.on('error', function (err, source) {
+  console.error('wrtc.electronDaemon error: ' + err)
   shutdown()
 })
 
