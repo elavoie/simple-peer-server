@@ -17,6 +17,18 @@ function ping () {
   timeout = setTimeout(ping, 1000)   
 }
 
+function shutdown() {
+  clearTimeout(timeout)
+  if (p) {
+    p.destroy()
+    p = null
+  }
+  if (socket) { 
+    socket.destroy()
+    socket = null
+  }
+}
+
 var p = null
 socket.on('connect', function () {
   p = new SimplePeer({ 'initiator': initiator, wrtc: wrtc })
@@ -33,14 +45,12 @@ socket.on('connect', function () {
 
   p.on('close', function () {
     console.log('closed')
-    clearTimeout(timeout)
-    p.destroy()
+    shutdown()
   })
 
   p.on('error', function (err) {
     console.log('error: ' + err)
-    clearTimeout(timeout)
-    p.destroy()
+    shutdown()
   })
 
   p.on('data', function (data) {
