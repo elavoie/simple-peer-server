@@ -34,11 +34,13 @@ socket.on('connect', function () {
   p.on('close', function () {
     console.log('closed')
     clearTimeout(timeout)
+    p.destroy()
   })
 
   p.on('error', function (err) {
     console.log('error: ' + err)
     clearTimeout(timeout)
+    p.destroy()
   })
 
   p.on('data', function (data) {
