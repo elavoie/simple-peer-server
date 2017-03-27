@@ -1,6 +1,9 @@
 #!/usr/bin/env node
 var SimplePeer = require('simple-peer')
 var SimpleSocket = require('simple-websocket')
+var probe = require('pull-probe')
+var pull = require('pull-stream')
+var toPull = require('stream-to-pull-stream') 
 var wrtc = require('electron-webrtc')()
 
 var host = process.argv[2]
@@ -60,7 +63,21 @@ socket.on('connect', function () {
 
   p.on('connect', function () {
     console.log('connected')
-    if (initiator) ping()
+    if (initiator) {
+      // ping is the other option
+      // ping()
+
+      // Continously send numbers
+      pull(
+        pull.count(),
+        pull.map(String),
+        probe('before send'),
+        toPull(p).duplex,
+        probe('after receive'),
+        pull.through(console.log),
+        pull.drain() 
+      )
+    }
   })
 
   p.on('close', function () {
@@ -77,6 +94,9 @@ socket.on('connect', function () {
     console.log('data: ' + data)
     if (data.toString() === 'ping') {
       p.send('pong')
+    } else if (!initiator) {
+      var n = Number.parseInt(data)
+      p.send(String(n*n))
     }
   })
 })
