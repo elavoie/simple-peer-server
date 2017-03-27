@@ -28,7 +28,7 @@ socket.on('connect', function () {
 
   p.on('connect', function () {
     console.log('connected')
-    ping()
+    if (initiator) ping()
   })
 
   p.on('close', function () {
@@ -41,7 +41,7 @@ socket.on('connect', function () {
 
   p.on('data', function (data) {
     console.log('data: ' + data)
-    if (data === 'ping') {
+    if (data.toString() === 'ping') {
       p.send('pong')
     }
   })
