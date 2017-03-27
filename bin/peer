@@ -68,8 +68,9 @@ socket.on('connect', function () {
       // ping()
 
       var s = toPull.duplex(p, function (err) {
-        console.log('duplex stream error: ' + err)
-        shutdown()
+        if (err) {
+          console.log('duplex stream error: ' + err)
+        }
       })
 
       // Continously send numbers
