@@ -26,8 +26,8 @@ socket.on('connect', function () {
     console.log('closed')
   })
 
-  p.on('error', function () {
-    console.log('closed')
+  p.on('error', function (err) {
+    console.log('error: ' + err)
   })
 })
 
