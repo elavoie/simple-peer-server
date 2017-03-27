@@ -76,7 +76,7 @@ socket.on('connect', function () {
         toPull.duplex(p),
         pull.map(String),
         probe('peer:after-receive'),
-        pull.through(console.log),
+        pull.through(function (x) { console.log(x.toString()) }),
         pull.drain() 
       )
     }
