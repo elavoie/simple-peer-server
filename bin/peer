@@ -4,7 +4,7 @@ var SimpleSocket = require('simple-websocket')
 var probe = require('pull-probe')
 var pull = require('pull-stream')
 var toPull = require('stream-to-pull-stream') 
-var wrtc = require('@elavoie/electron-webrtc')()
+var wrtc = require('electron-webrtc')()
 
 var host = process.argv[2]
 console.log('host: ' + host)
@@ -22,9 +22,16 @@ function ping () {
   }
 }
 
+var closed = false
 function shutdown() {
+  if (closed) return
+  closed = true
   console.log('shutdown');
   clearTimeout(timeout)
+
+  // wrtc needs to be closed before we destroy the peer,
+  // otherwise we endup with all sorts of errors
+  wrtc.close()
   if (p) {
     p.destroy()
     p = null
@@ -33,20 +40,7 @@ function shutdown() {
     socket.destroy()
     socket = null
   }
-  wrtc.close()
 }
-
-// Catching errors coming from evaluating code in electron-eval.
-wrtc.on('error', function (err, source) {
-  console.error('wrtc error: ' + err)
-  shutdown()
-})
-
-// Catching errors coming from the electron process crashing.
-wrtc.electronDaemon.on('error', function (err, source) {
-  console.error('wrtc.electronDaemon error: ' + err)
-  shutdown()
-})
 
 process.on('SIGINT', function() {
   shutdown()  

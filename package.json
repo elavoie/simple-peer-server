@@ -23,7 +23,7 @@
   },
   "homepage": "https://github.com/elavoie/simple-peer-server#readme",
   "dependencies": {
-    "@elavoie/electron-webrtc": "^0.3.1",
+    "electron-webrtc": "^0.3.0",
     "express": "^4.14.1",
     "pull-probe": "^1.0.2",
     "pull-stream": "^3.5.0",
